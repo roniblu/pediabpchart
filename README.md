@@ -93,22 +93,6 @@ pedibp/
 └── .gitignore
 ```
 
-## Publish to GitHub
-
-A full step-by-step tutorial — including how to host it free on GitHub Pages —
-is in [SETUP.md](./SETUP.md).
-
-## Local development
-
-No package manager, no compiler. Just:
-
-```bash
-# from the project root
-python3 -m http.server 5000
-# open http://localhost:5000
-```
-
-Or simply double-click `index.html`.
 
 ## Disclaimer
 
