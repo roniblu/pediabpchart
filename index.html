@@ -1,0 +1,277 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Pediatric BP Percentile Calculator — 2017 AAP Guidelines</title>
+    <meta
+      name="description"
+      content="Interactive pediatric blood pressure percentile and classification tool based on the 2017 American Academy of Pediatrics Clinical Practice Guideline."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%2308595e'/%3E%3Cpath d='M7 18 L11 18 L13 12 L15 22 L17 14 L19 18 L25 18' stroke='white' stroke-width='2.2' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"
+    />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="header-inner">
+        <a href="#" class="brand" aria-label="PediBP — pediatric blood pressure calculator">
+          <svg
+            class="brand-mark"
+            width="32"
+            height="32"
+            viewBox="0 0 32 32"
+            fill="none"
+            aria-hidden="true"
+          >
+            <rect width="32" height="32" rx="7" fill="currentColor" />
+            <path
+              d="M6 18 L10.5 18 L12.5 12 L14.5 22 L16.5 14 L18.5 18 L26 18"
+              stroke="var(--color-bg)"
+              stroke-width="2.2"
+              fill="none"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+          <span class="brand-text">
+            <span class="brand-name">PediBP</span>
+            <span class="brand-sub">2017 AAP Guideline</span>
+          </span>
+        </a>
+        <button
+          class="theme-toggle"
+          data-theme-toggle
+          aria-label="Switch to dark mode"
+          type="button"
+        ></button>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div class="hero-inner">
+          <p class="eyebrow">Clinical decision support</p>
+          <h1>Pediatric blood pressure percentile calculator</h1>
+          <p class="lede">
+            Enter age, sex, height, and measured BP to estimate the systolic and diastolic
+            percentiles, Z-scores, and 2017 AAP classification — calibrated for children 1 to
+            17&nbsp;years.
+          </p>
+        </div>
+      </section>
+
+      <section class="calculator">
+        <form id="bp-form" class="card form-card" novalidate>
+          <h2 class="card-title">Patient inputs</h2>
+          <p class="card-sub">All fields required. Use the average of repeated, properly sized cuff measurements.</p>
+
+          <div class="grid">
+            <div class="field">
+              <label for="age">Age <span class="hint">(years)</span></label>
+              <input
+                type="number"
+                id="age"
+                name="age"
+                min="1"
+                max="17.99"
+                step="0.1"
+                placeholder="e.g. 8.5"
+                required
+                inputmode="decimal"
+              />
+              <p class="field-msg">Range 1–17.99 years</p>
+            </div>
+
+            <fieldset class="field segmented">
+              <legend>Sex</legend>
+              <div class="segmented-group" role="radiogroup" aria-label="Sex">
+                <input type="radio" id="sex-m" name="sex" value="M" checked />
+                <label for="sex-m">Male</label>
+                <input type="radio" id="sex-f" name="sex" value="F" />
+                <label for="sex-f">Female</label>
+              </div>
+            </fieldset>
+
+            <fieldset class="field segmented">
+              <legend>Height input</legend>
+              <div class="segmented-group" role="radiogroup" aria-label="Height type">
+                <input type="radio" id="ht-cm" name="htmode" value="cm" checked />
+                <label for="ht-cm">cm</label>
+                <input type="radio" id="ht-pct" name="htmode" value="pct" />
+                <label for="ht-pct">Percentile</label>
+              </div>
+            </fieldset>
+
+            <div class="field" id="height-cm-field">
+              <label for="height">Height <span class="hint">(cm)</span></label>
+              <input
+                type="number"
+                id="height"
+                name="height"
+                min="60"
+                max="210"
+                step="0.1"
+                placeholder="e.g. 128.5"
+                inputmode="decimal"
+              />
+              <p class="field-msg" id="ht-derived">Height percentile will appear after calculation</p>
+            </div>
+
+            <div class="field hidden" id="height-pct-field">
+              <label for="height-pct">Height percentile</label>
+              <input
+                type="number"
+                id="height-pct"
+                name="height-pct"
+                min="0.1"
+                max="99.9"
+                step="0.1"
+                placeholder="e.g. 50"
+                inputmode="decimal"
+              />
+              <p class="field-msg">Range 0.1–99.9</p>
+            </div>
+
+            <div class="field">
+              <label for="sbp">Systolic BP <span class="hint">(mmHg)</span></label>
+              <input
+                type="number"
+                id="sbp"
+                name="sbp"
+                min="50"
+                max="220"
+                step="1"
+                placeholder="e.g. 105"
+                required
+                inputmode="numeric"
+              />
+            </div>
+
+            <div class="field">
+              <label for="dbp">Diastolic BP <span class="hint">(mmHg)</span></label>
+              <input
+                type="number"
+                id="dbp"
+                name="dbp"
+                min="20"
+                max="140"
+                step="1"
+                placeholder="e.g. 65"
+                required
+                inputmode="numeric"
+              />
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary" id="calc-btn">Calculate</button>
+            <button type="button" class="btn btn-ghost" id="reset-btn">Reset</button>
+            <button type="button" class="btn btn-ghost" id="example-btn">Load example</button>
+          </div>
+
+          <p class="form-error" id="form-error" role="alert" hidden></p>
+        </form>
+
+        <section class="results" id="results" aria-live="polite" aria-atomic="true">
+          <div class="results-empty">
+            <div class="empty-icon" aria-hidden="true">
+              <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 12h4l3-9 4 18 3-9h4" />
+              </svg>
+            </div>
+            <h3>Awaiting input</h3>
+            <p>Fill the patient fields, then press Calculate to see percentiles, Z-scores, and the AAP risk classification.</p>
+          </div>
+        </section>
+      </section>
+
+      <section class="reference" aria-labelledby="ref-heading">
+        <h2 id="ref-heading">2017 AAP classification reference</h2>
+        <div class="ref-grid">
+          <div class="ref-col">
+            <h3>Children 1 to &lt;13&nbsp;y</h3>
+            <ul class="ref-list">
+              <li><span class="dot" data-level="normal"></span><strong>Normal</strong> — &lt; 90th percentile (SBP and DBP)</li>
+              <li><span class="dot" data-level="elevated"></span><strong>Elevated</strong> — ≥ 90th to &lt; 95th, or 120/80 to &lt; 95th (lower of)</li>
+              <li><span class="dot" data-level="stage1"></span><strong>Stage 1 HTN</strong> — ≥ 95th to &lt; 95th + 12, or 130/80 to 139/89 (lower of)</li>
+              <li><span class="dot" data-level="stage2"></span><strong>Stage 2 HTN</strong> — ≥ 95th + 12, or ≥ 140/90 (lower of)</li>
+            </ul>
+          </div>
+          <div class="ref-col">
+            <h3>Adolescents ≥ 13&nbsp;y</h3>
+            <ul class="ref-list">
+              <li><span class="dot" data-level="normal"></span><strong>Normal</strong> — &lt; 120/&lt;80 mmHg</li>
+              <li><span class="dot" data-level="elevated"></span><strong>Elevated</strong> — 120/&lt;80 to 129/&lt;80 mmHg</li>
+              <li><span class="dot" data-level="stage1"></span><strong>Stage 1 HTN</strong> — 130/80 to 139/89 mmHg</li>
+              <li><span class="dot" data-level="stage2"></span><strong>Stage 2 HTN</strong> — ≥ 140/90 mmHg</li>
+            </ul>
+          </div>
+        </div>
+        <details class="methodology">
+          <summary>Methodology &amp; limitations</summary>
+          <div class="methodology-body">
+            <p>
+              <strong>Height percentile</strong> uses the CDC 2000 stature-for-age LMS reference
+              (ages 24–240&nbsp;months), with linear interpolation between half-monthly LMS rows.
+              The Z-score is computed via the Box–Cox formula
+              <code>Z = ((X/M)^L − 1) / (L·S)</code>.
+            </p>
+            <p>
+              <strong>Blood pressure percentile</strong> uses the 4th-order polynomial regression
+              of age and height-Z published in the AAP 2017 guideline appendix (carried forward
+              from the 2004 4th Report). The conditional mean BP for the patient's age, sex, and
+              height-Z is computed, then the Z-score is
+              <code>Z = (BP − μ) / σ</code> with the published σ (10.7128 / 10.4855 / 11.6032 /
+              10.9573 mmHg for SBP♂ / SBP♀ / DBP♂ / DBP♀). The Z-score is mapped through the
+              standard normal CDF for the percentile.
+            </p>
+            <p>
+              <strong>Classification</strong> follows AAP 2017 Table 3. For children &lt;13&nbsp;y
+              the percentile-based and absolute-mmHg cutoffs are evaluated and the lower
+              (stricter) category is reported. Adolescents ≥13&nbsp;y use the absolute adult
+              thresholds.
+            </p>
+            <p class="warn">
+              <strong>For clinical screening only.</strong> This tool does not replace properly
+              measured, repeated BP readings or clinical judgment. AAP guidance is to obtain ≥3
+              elevated readings on separate occasions before diagnosing hypertension. Children
+              under 1&nbsp;y use Task Force 1987 / neonatal references not implemented here.
+            </p>
+          </div>
+        </details>
+      </section>
+
+      <footer class="site-footer">
+        <p>
+          Built on the
+          <a
+            href="https://publications.aap.org/pediatrics/article/140/3/e20171904/38358/Clinical-Practice-Guideline-for-Screening-and"
+            target="_blank"
+            rel="noopener"
+            >AAP 2017 Clinical Practice Guideline</a
+          >
+          and the
+          <a
+            href="https://www.cdc.gov/growthcharts/cdc-data-files.htm"
+            target="_blank"
+            rel="noopener"
+            >CDC 2000 stature-for-age LMS</a
+          >
+          tables. For educational and screening use — not a substitute for clinical judgment.
+        </p>
+      </footer>
+    </main>
+
+    <script src="lms-data.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
